@@ -21,7 +21,7 @@ app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 Bootstrap(app)
 app.app_context().push()
 ##CREATE DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL",  "sqlite:///movies.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("sqlite:///movies.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
