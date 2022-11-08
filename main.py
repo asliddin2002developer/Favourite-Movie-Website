@@ -75,7 +75,7 @@ def search():
 
     if request.args.get('search'):
         search_query = request.args.get("search")
-    movies = Movie.query.filter(Movie.title.like(search_query)).all()
+    movies = Movie.query.filter(Movie.title.contains(search_query)).all()
 
 
     return render_template("search_result.html", movies=movies, search_query=search_query)
