@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
@@ -65,7 +65,7 @@ db.create_all()
 
 
 
-@app.route("/api")
+@app.route("/api", methods=['GET'])
 def get_api():
     all_movies = Movie.query.all()
     return jsonify(all_movies=[movie.to_dict() for movie in all_movies])
