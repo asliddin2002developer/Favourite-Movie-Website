@@ -55,10 +55,29 @@ class Movie(db.Model):
     ranking = db.Column(db.Integer, nullable=True)
     review = db.Column(db.String(250), nullable=True)
     img_url = db.Column(db.String(250), nullable=False)
+    
+    def to_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
     def __repr__(self):
         return '<Movie %r>' % self.title
 db.create_all()
+
+
+
+@app.route("/api")
+def get_api():
+    all_movies = Movie.query.all()
+    return jsonify(all_movies=[movie.to_dict() for movie in all_movies])
+
+@app.route("/search_year", methods=['GET'])
+def get_movie_by_year():
+    query_year = request.args.get("search")
+    movies = db.session.query(Movie).filter_by(year=query_year).all()
+    if movies:
+        return jsonify(all_movies=[movie.to_dict() for movie in movies])
+    else:
+        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
 
 @app.route("/")
