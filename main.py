@@ -6,7 +6,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
-from flask_restful import Resource, Api,  marshal_with, fields
 import os
 
 
@@ -26,25 +25,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-taskFields = {
-    'id':fields.Integer,
-    'title':fields.String,
-    'year': fields.Integer,
-    'description': fields.String,
-    'rating': fields.Integer,
-    'review': fields.String,
-    'img_url': fields.String
- }
-
-# @app.route("/api")
-# def get_api():
-#     class Movies(Resource):
-#         @marshal_with(taskFields)
-#         def get(self):
-#             movies = Movie.query.all()
-#             return movies
-#     api.add_resource(Movies, '/')
-#     return
 ##CREATE TABLE
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
