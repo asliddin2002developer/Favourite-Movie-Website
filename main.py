@@ -6,7 +6,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
-import os
 
 
 MOVIE_DB_API_KEY = "0d6bfd3cd78beb33a2131157bf002936"
@@ -44,19 +43,21 @@ db.create_all()
 
 
 
+############ FORMS #####################
+class RateMovieForm(FlaskForm):
+    rating = StringField("Your Rating Out of 10 e.g. 7.5")
+    review = StringField("Your Review")
+    submit = SubmitField("Done")
+
+class FindMovieForm(FlaskForm):
+    title = StringField("Movie Title")
+    submit = SubmitField("Add Movie")
+
+
 @app.route("/api", methods=['GET'])
 def get_api():
     all_movies = Movie.query.all()
     return jsonify(all_movies=[movie.to_dict() for movie in all_movies])
-
-@app.route("/search_year", methods=['GET'])
-def get_movie_by_year():
-    query_year = request.args.get("search")
-    movies = db.session.query(Movie).filter_by(year=query_year).all()
-    if movies:
-        return jsonify(all_movies=[movie.to_dict() for movie in movies])
-    else:
-        return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
 
 @app.route("/")
@@ -73,20 +74,13 @@ def search():
 
     if request.args.get('search'):
         search_query = request.args.get("search")
-    movies = Movie.query.filter(Movie.title.contains(search_query)).all()
+    movies = Movie.query.filter(Movie.title.contains(search_query) |
+                                Movie.year.contains(search_query)  |
+                                Movie.review.contains(search_query) ).all()
 
 
     return render_template("search_result.html", movies=movies, search_query=search_query)
 
-
-class RateMovieForm(FlaskForm):
-    rating = StringField("Your Rating Out of 10 e.g. 7.5")
-    review = StringField("Your Review")
-    submit = SubmitField("Done")
-
-class FindMovieForm(FlaskForm):
-    title = StringField("Movie Title")
-    submit = SubmitField("Add Movie")
 
 @app.route("/find")
 def find_movie():

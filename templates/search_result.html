@@ -17,7 +17,7 @@
   <p class="description">These are my all time favourite movies.</p>
 
   <form class="form-inline" action="{{ url_for('search') }}">
-          <input class="form-control" type="search" name="search"  placeholder="Search from the Database" value='{{search_query}}'>
+          <input class="form-control" type="search" name="search"  placeholder="Search by title, year, review.." value='{{search_query}}'>
           <button class="btn btn-primary" type="submit">Search!</button>
   </form>
 
@@ -43,6 +43,11 @@
     </div>
   </div>
     {% endfor %}
+
+</div>
+
+<div style="padding-bottom: 12px;" class="container text-center add">
+<a href="{{ url_for('add_movie')}}" class="button">Add Movie</a>
 </div>
 
 
